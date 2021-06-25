@@ -17,7 +17,11 @@ fi
 
 milestone_name=$(jq --raw-output .milestone.title $GITHUB_EVENT_PATH)
 
+# Splits the string in $GITHUB_REPOSITORY which takes
+# the form "owner/repository" into two variables
+# called $owner and $repository
 IFS='/' read owner repository <<< "$GITHUB_REPOSITORY"
+
 
 release_url=$(dotnet gitreleasemanager create \
 --milestone $milestone_name \
@@ -26,6 +30,11 @@ release_url=$(dotnet gitreleasemanager create \
 --token $repo_token \
 --owner $owner \
 --repository $repository)
+
+if [ $? -ne 0 ]; then
+  echo "::error::Failed to create the release draft"
+  exit 1
+fi
 
 echo "::set-output name=release-url::$release_url"
 
