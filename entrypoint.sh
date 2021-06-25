@@ -1,6 +1,6 @@
 #!/bin/bash
 set -u
 
-echo "::set-output name=release-url::$release_url"
+echo "::set-output name=release-url::http://www.example.com"
 
 exit 0
